@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidana Platform – Startup Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<style>.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}</style>
+</head>
+<body>
+<div class="bg-shapes"><span class="s1"></span><span class="s2"></span></div>
+<header class="nav"><div class="wrap"><a href="index.html" class="logo">Sidana<small>Ventures</small></a><nav class="nav-links"><a href="about.html">About</a><a href="portfolio.html">Portfolio</a><a href="approach.html">Approach</a><a href="insights.html">Insights</a><a href="resources.html">Resources</a></nav><a href="platform.html" class="btn btn-primary">Launch Platform <i data-lucide="arrow-right"></i></a><button class="nav-toggle" aria-label="Menu"><i data-lucide="menu"></i></button></div></header>
+
+<main class="wrap">
+  <section class="login-page">
+    <div>
+      <div class="eyebrow reveal in">Sidana Platform</div>
+      <h1 class="words">Turn your vision into <span class="accent">what's next.</span></h1>
+      <p class="lead reveal" style="transition-delay:.5s">Access Sidana's platform to submit your company, manage your profile, track progress and connect with the right opportunities.</p>
+      <div class="list-feat stagger">
+        <div><div class="ico"><i data-lucide="file-text"></i></div><div><b>Submit Your Company</b><span>Share your vision, traction and details.</span></div></div>
+        <div><div class="ico"><i data-lucide="activity"></i></div><div><b>Track Progress</b><span>Stay updated on your application status.</span></div></div>
+        <div><div class="ico"><i data-lucide="users"></i></div><div><b>Get Matched</b><span>Connect with relevant opportunities.</span></div></div>
+        <div><div class="ico"><i data-lucide="rocket"></i></div><div><b>Accelerate Growth</b><span>Access resources, guidance and support.</span></div></div>
+      </div>
+    </div>
+    <div class="login-visual">
+      <div class="photo reveal right"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80" alt="Office with skyline" loading="lazy"></div>
+      <div class="info-tile reveal" style="right:100px;top:30px;width:250px;transition-delay:.4s"><div class="ico sm"><i data-lucide="bar-chart-3"></i></div><div><b>Join a network</b><span>of visionary founders</span></div></div>
+      <div class="info-tile reveal" style="right:-10px;bottom:30px;width:240px;transition-delay:.6s"><div class="ico sm"><i data-lucide="globe"></i></div><div><b>From India</b><span>to Global Markets</span></div></div>
+      <div class="login-card reveal scale" style="transition-delay:.2s">
+        <div class="ico lg"><i data-lucide="rocket"></i></div>
+        <h2>Startup Login</h2>
+        <p>Access your dashboard to manage your company profile and opportunities.</p>
+        <form id="platform-login">
+          <div class="field"><label>Email address</label><input class="input" type="email" placeholder="you@company.com" value="rahul@technova.ai" required></div>
+          <div class="field"><label>Password</label><div class="input-wrap"><input class="input" type="password" id="pw" placeholder="Enter your password" value="walkthrough" required><button type="button" id="pw-eye" aria-label="Show password"><i data-lucide="eye"></i></button></div></div>
+          <div class="row-between"><label class="check"><input type="checkbox" checked> Remember me</label><a href="#" id="forgot" style="color:var(--blue);font-weight:500">Forgot password?</a></div>
+          <button class="btn btn-primary" type="submit">Sign In <i data-lucide="arrow-right"></i></button>
+        </form>
+        <div class="alt">Don't have an account? <a href="#" id="req-access">Request access</a></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="feature-strip stagger" style="margin-bottom:40px">
+    <div><div class="ico"><i data-lucide="zap"></i></div><h3>Simple Application</h3><p>A streamlined process to submit your company details.</p></div>
+    <div><div class="ico"><i data-lucide="users"></i></div><h3>Focused Opportunities</h3><p>Be matched with relevant investors and partners.</p></div>
+    <div><div class="ico"><i data-lucide="bar-chart-3"></i></div><h3>Track and Manage</h3><p>Monitor your progress in one place.</p></div>
+    <div><div class="ico"><i data-lucide="leaf"></i></div><h3>Beyond Capital</h3><p>Access strategic support, network and resources.</p></div>
+  </div>
+</main>
+
+<footer><div class="wrap"><div class="cols"><div><a href="index.html" class="logo">Sidana<small>Ventures</small></a><p style="color:var(--ink-2);margin-top:16px;max-width:320px;font-size:15px">Early-stage venture firm backing founders who build what's next, from India to global markets.</p></div><div><h4>Company</h4><a href="about.html">About</a><a href="approach.html">Approach</a><a href="portfolio.html">Portfolio</a><a href="insights.html">Insights</a></div><div><h4>Founders</h4><a href="platform.html">Launch Platform</a><a href="resources.html">Resources</a><a href="platform.html">Request access</a></div><div><h4>Connect</h4><a href="#">hello@sidanaventures.com</a><a href="#">LinkedIn</a><a href="#">X (Twitter)</a><a href="#">Bangalore · Singapore</a></div></div><div class="fine"><span>© 2026 Sidana Ventures. All rights reserved.</span><span>Privacy · Terms</span></div></div></footer>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script src="js/site.js"></script>
+</body>
+</html>
