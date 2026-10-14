@@ -7,7 +7,7 @@ PAGES.dashboard = {
   render(){
     const s = DB.startup, f = DB.fin;
     const top = DB.investors.slice(0,5);
-    const steps = [['Pitch Deck Uploaded','done'],['Verify Details','done'],['Basic Information','done'],['Financial Details','cur'],['Profile Complete','']];
+    const steps = [['Pitch Deck Uploaded','done'],['Verify Details','done'],['Basic Information','done'],['Financial Details', s.completion >= 80 ? 'done' : 'cur'],['Profile Complete', s.completion >= 100 ? 'done' : 'cur']];
     const upcoming = DB.meetings.filter(m=>m.status!=='Completed');
     const active = DB.campaigns.filter(c=>c.status==='Active');
     return `
@@ -27,8 +27,8 @@ PAGES.dashboard = {
       </div>
       <div class="hero-right">
         <div class="pc">${s.completion}% complete</div><div class="progress"><span style="width:${s.completion}%"></span></div>
-        <button class="btn btn-white mt8" data-go="financials">Continue to Financial Details ${I('arrow-right')}</button>
-        <span class="skip" id="d-skip">Skip for now</span>
+        <button class="btn btn-white mt8" data-go="financials">${s.completion >= 80 ? 'Manage Financial Details' : 'Continue to Financial Details'} ${I('arrow-right')}</button>
+        <span class="skip" id="d-skip">Dismiss</span>
       </div>
     </div>`:''}
 

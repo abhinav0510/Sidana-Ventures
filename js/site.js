@@ -19,7 +19,7 @@
   /* reveal on scroll */
   const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in','in-view'); if(e.target.dataset.count) countUp(e.target); io.unobserve(e.target); } }),{threshold:.15});
   $$('.reveal,.stagger,[data-count],.steps-wrap').forEach(el=>io.observe(el));
-  function countUp(el){ const end=parseFloat(el.dataset.count), suffix=el.dataset.suffix||'', dur=1400, t0=performance.now(); const step=t=>{ const p=Math.min(1,(t-t0)/dur), v=Math.round(end*(1-Math.pow(1-p,3))); el.textContent=v+suffix; if(p<1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+  function countUp(el){ const end=parseFloat(el.dataset.count), suffix=el.dataset.suffix||'', prefix=el.dataset.prefix||'', dur=1400, t0=performance.now(); const step=t=>{ const p=Math.min(1,(t-t0)/dur), v=Math.round(end*(1-Math.pow(1-p,3))); el.textContent=prefix+v+suffix; if(p<1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
 
   /* tilt on hover */
   $$('.tilt').forEach(el=>{ el.addEventListener('mousemove',e=>{ const r=el.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; el.style.transform=`perspective(900px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-4px)`; }); el.addEventListener('mouseleave',()=>el.style.transform=''); });

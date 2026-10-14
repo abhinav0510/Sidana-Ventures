@@ -33,7 +33,7 @@ function route(){
 function render(){
   const h=(location.hash||'#/login').replace(/^#\//,''); const root=$('#root'); closeModal(); closeDropdowns(); closeCmdk(); stopTour();
   if(h==='login') root.innerHTML=AUTH.login(); else if(h==='signup') root.innerHTML=AUTH.signup(); else if(h==='forgot') root.innerHTML=AUTH.forgot();
-  else if(h==='onboarding/type') root.innerHTML=AUTH.onbType(); else if(h==='onboarding/details') root.innerHTML=AUTH.onbDetails();
+  else if(h==='onboarding/type') root.innerHTML=AUTH.onbType(); else if(h==='onboarding/details') root.innerHTML=AUTH.onbDetails(); else if(h==='onboarding/financials') root.innerHTML=AUTH.onbFinancials();
   refreshIcons(); AUTH.wire(h); AUTH.wireOnb(h); window.scrollTo(0,0);
 }
 function renderShell(){

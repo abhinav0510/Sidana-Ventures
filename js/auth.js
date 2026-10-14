@@ -71,7 +71,7 @@ AUTH.forgot = () => `
 </div>`;
 
 function walkBadge(step){
-  const steps=['Login','Startup type','Business details','Dashboard'];
+  const steps=['Login','Startup type','Business details','Financial details','Dashboard'];
   return `<div class="walk-badge">${I('route')} <span>Walkthrough · ${steps[step]}</span><div class="dots">${steps.map((s,i)=>`<span class="${i<step?'done':i===step?'cur':''}" title="${s}"></span>`).join('')}</div></div>`;
 }
 
@@ -108,8 +108,9 @@ const onbTop = (step) => `
   <div class="onb-steps">
     <div class="s done"><b>${I('check')}</b> Account</div><div class="ln"></div>
     <div class="s ${step===1?'active':'done'}"><b>${step===1?'2':I('check')}</b> Startup type</div><div class="ln"></div>
-    <div class="s ${step===2?'active':''}"><b>3</b> Business details</div><div class="ln"></div>
-    <div class="s"><b>4</b> Dashboard</div>
+    <div class="s ${step===2?'active':step>2?'done':''}"><b>${step>2?I('check'):'3'}</b> Business details</div><div class="ln"></div>
+    <div class="s ${step===3?'active':step>3?'done':''}"><b>${step>3?I('check'):'4'}</b> Financial details</div><div class="ln"></div>
+    <div class="s ${step===4?'active':''}"><b>5</b> Dashboard</div>
   </div>
   <div class="row gap10">${avatar(DB.user.initials,'#15348a','sm')}<span class="small strong">${DB.user.name}</span></div>
 </div>`;
@@ -146,9 +147,114 @@ AUTH.onbDetails = () => {
     <div id="onb-review" class="hidden mt24"></div>` : `
     <div class="card" style="padding:26px">${detailsForm(t, s, ex)}</div>`}
 
-    <div class="onb-actions"><a href="#/onboarding/type" class="btn btn-ghost">${I('arrow-left')} Back</a><div class="row gap10"><button class="btn btn-secondary" id="onb-skip">Skip for now</button><button class="btn btn-primary btn-lg" id="onb-finish">Enter dashboard ${I('arrow-right')}</button></div></div>
+    <div class="onb-actions"><a href="#/onboarding/type" class="btn btn-ghost">${I('arrow-left')} Back</a><div class="row gap10"><button class="btn btn-secondary" id="onb-skip">Skip for now</button><button class="btn btn-primary btn-lg" id="onb-finish">Continue to Financial Details ${I('arrow-right')}</button></div></div>
   </div></div>
 </div>${walkBadge(2)}`;
+};
+
+AUTH.onbFinancials = () => {
+  const f = DB.fin, s = DB.startup;
+  return `
+<div class="onb">${onbTop(3)}
+  <div class="onb-body"><div class="onb-wrap">
+    <h1>Enter your financial details</h1>
+    <p class="lead">Provide your revenue traction, burn rate, unit economics and capital requirements. This information is required for mandate valuation, financial modeling and matching with institutional investors.</p>
+
+    <div class="card pad-sm row between mb20" style="background:linear-gradient(90deg,#eef3ff,#fff);border-color:#dbe4ff">
+      <div class="row gap12">
+        <span class="ico-box blue">${I('sparkles')}</span>
+        <div>
+          <b class="small">Financial model integration</b>
+          <div class="xs muted">Pre-fill metrics from your uploaded documents or import directly from Financial_Model.xlsx</div>
+        </div>
+      </div>
+      <div class="row gap8">
+        <button type="button" class="btn btn-secondary btn-sm" id="onb-f-import">${I('file-spreadsheet')} Import from Model</button>
+        <button type="button" class="btn btn-soft btn-sm" id="onb-f-autofill">${I('sparkles')} Auto-fill with AI</button>
+      </div>
+    </div>
+
+    <div class="col gap20">
+      <!-- Section 1: Revenue & Scale -->
+      <div class="card" style="padding:26px">
+        <div class="row gap10 mb16">
+          <span class="ico-box sm green">${I('trending-up')}</span>
+          <div><b style="font-size:16px">Revenue & Growth Traction</b><div class="xs muted">Historical and current run-rate revenue figures</div></div>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="field"><label>Monthly Revenue (₹) <span class="req">*</span></label><input class="input" data-fin="revenue" value="20,00,000" placeholder="e.g. 20,00,000"></div>
+          <div class="field"><label>Annual Run Rate / ARR (₹)</label><input class="input" data-fin="arr" value="₹2.1 Cr" placeholder="e.g. ₹2.1 Cr"></div>
+          <div class="field"><label>MoM Revenue Growth (%)</label><input class="input" data-fin="mom" value="25%" placeholder="e.g. 25%"></div>
+          <div class="field"><label>YoY Revenue Growth</label><input class="input" data-fin="yoy" value="3.2x" placeholder="e.g. 3.2x"></div>
+          <div class="field"><label>Gross Margin (%)</label><input class="input" data-fin="margin" value="60%" placeholder="e.g. 60%"></div>
+          <div class="field"><label>EBITDA Margin (%)</label><input class="input" data-fin="ebitda" value="22%" placeholder="e.g. 22%"></div>
+        </div>
+      </div>
+
+      <!-- Section 2: Cash, Burn & Runway -->
+      <div class="card" style="padding:26px">
+        <div class="row gap10 mb16">
+          <span class="ico-box sm violet">${I('flame')}</span>
+          <div><b style="font-size:16px">Burn Rate, Cash & Runway</b><div class="xs muted">Capital efficiency and current cash position</div></div>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="field"><label>Monthly Net Burn (₹) <span class="req">*</span></label><input class="input" data-fin="burn" value="12,00,000" placeholder="e.g. 12,00,000"></div>
+          <div class="field"><label>Cash in Bank (₹)</label><input class="input" data-fin="cash" value="2,16,00,000" placeholder="e.g. 2,16,00,000"></div>
+          <div class="field"><label>Runway (Months) <span class="req">*</span></label><input class="input" data-fin="runway" value="18" placeholder="e.g. 18"></div>
+          <div class="field"><label>Burn Trend</label><select class="select" data-fin="burntrend"><option selected>Stable</option><option>Decreasing (Improving)</option><option>Increasing (Scaling)</option></select></div>
+          <div class="field"><label>Primary Cost Driver</label><select class="select"><option selected>Engineering & Talent</option><option>Customer Acquisition / Marketing</option><option>Infrastructure & Compute</option><option>Operations</option></select></div>
+          <div class="field"><label>Break-even Timeline</label><select class="select"><option selected>6 – 12 months</option><option>Currently Profitable</option><option>12 – 18 months</option><option>> 18 months</option></select></div>
+        </div>
+      </div>
+
+      <!-- Section 3: Target Capital Raise & Mandate -->
+      <div class="card" style="padding:26px">
+        <div class="row gap10 mb16">
+          <span class="ico-box sm blue">${I('target')}</span>
+          <div><b style="font-size:16px">Capital Raise & Mandate Structuring</b><div class="xs muted">Target round size, valuation and closure timeline</div></div>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="field"><label>Target Raise Amount (₹) <span class="req">*</span></label><input class="input" data-fin="target" value="5,00,00,000" placeholder="e.g. 5,00,00,000"></div>
+          <div class="field"><label>Target Raise (USD equivalent)</label><input class="input" data-fin="targetUsd" value="$5M" placeholder="e.g. $5M"></div>
+          <div class="field"><label>Pre-Money Valuation (₹)</label><input class="input" data-fin="val" value="25,00,00,000" placeholder="e.g. 25,00,00,000"></div>
+          <div class="field"><label>Transaction Round / Structure</label><select class="select" data-fin="stage"><option>Seed</option><option selected>Series A</option><option>Series B</option><option>Growth Capital</option><option>Strategic M&A</option></select></div>
+          <div class="field"><label>Expected Closure Timeline</label><select class="select" data-fin="closure"><option selected>Q3 2026</option><option>Q4 2026</option><option>Q1 2027</option><option>Q2 2027</option></select></div>
+          <div class="field"><label>Preferred Investor Type</label><select class="select"><option selected>Institutional VCs & Growth Funds</option><option>Strategic Corporate Acquirers</option><option>Family Offices & Sovereign Wealth</option><option>Venture Debt Providers</option></select></div>
+        </div>
+      </div>
+
+      <!-- Section 4: Unit Economics & Capital Allocation -->
+      <div class="card" style="padding:26px">
+        <div class="row gap10 mb16">
+          <span class="ico-box sm teal">${I('pie-chart')}</span>
+          <div><b style="font-size:16px">Unit Economics & Capital Allocation</b><div class="xs muted">Core unit metrics and planned use of capital</div></div>
+        </div>
+        <div class="form-grid cols-4 mb16">
+          <div class="field"><label>Active Customers</label><input class="input" data-fin="customers" value="500+" placeholder="e.g. 500+"></div>
+          <div class="field"><label>Avg. Contract Value (ARPC)</label><input class="input" data-fin="arpc" value="₹5,000" placeholder="e.g. ₹5,000"></div>
+          <div class="field"><label>Net Revenue Retention (%)</label><input class="input" data-fin="retention" value="98%" placeholder="e.g. 98%"></div>
+          <div class="field"><label>Monthly Churn Rate (%)</label><input class="input" data-fin="churn" value="8%" placeholder="e.g. 8%"></div>
+        </div>
+        <div class="field"><label>Planned Use of Capital Breakdown</label>
+          <div class="four" style="gap:10px">
+            <div class="mini-stat" style="flex-direction:column;align-items:flex-start;gap:4px"><b>40%</b><span>Product & Tech</span></div>
+            <div class="mini-stat" style="flex-direction:column;align-items:flex-start;gap:4px"><b>25%</b><span>Team & Leadership</span></div>
+            <div class="mini-stat" style="flex-direction:column;align-items:flex-start;gap:4px"><b>20%</b><span>Market Expansion</span></div>
+            <div class="mini-stat" style="flex-direction:column;align-items:flex-start;gap:4px"><b>15%</b><span>Sales, GTM & Reserves</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="onb-actions">
+      <a href="#/onboarding/details" class="btn btn-ghost">${I('arrow-left')} Back to Business Details</a>
+      <div class="row gap10">
+        <button class="btn btn-secondary" id="onb-f-skip">Skip for now</button>
+        <button class="btn btn-primary btn-lg" id="onb-f-save">Save & Enter Dashboard ${I('arrow-right')}</button>
+      </div>
+    </div>
+  </div></div>
+</div>${walkBadge(3)}`;
 };
 
 function detailsForm(t, s, ex){
@@ -178,20 +284,108 @@ AUTH.wireOnb = (route) => {
   }
   if(route==='onboarding/details'){
     $$('.seg button').forEach(b=>b.onclick=()=>{ ONB.mode=b.dataset.mode; render(); });
-    const finish = ()=>{ $$('[data-f]').forEach(el=>{ if(el.value) { const k=el.dataset.f; if(k!=='rev') DB.startup[k]=el.value; } });
-      if(DB.startup.name) DB.startup.name = DB.startup.name; localStorage.setItem('sedana_onboarded','1'); saveState(); sessionStorage.setItem('sedana_tour','1'); location.hash='#/dashboard'; };
-    $('#onb-finish').onclick=()=>{ if(ONB.mode==='form' && !ONB.extracted && !$('[data-f=name]').value){ toast('Please enter at least your company name','err'); $('[data-f=name]').focus(); return; } finish(); };
-    $('#onb-skip').onclick=()=>{ localStorage.setItem('sedana_onboarded','1'); sessionStorage.setItem('sedana_tour','1'); location.hash='#/dashboard'; };
+    const finish = ()=>{
+      $$('[data-f]').forEach(el=>{ if(el.value) { const k=el.dataset.f; if(k!=='rev') DB.startup[k]=el.value; } });
+      if(DB.startup.name) DB.startup.name = DB.startup.name;
+      saveState();
+      location.hash='#/onboarding/financials';
+    };
+    $('#onb-finish').onclick=()=>{
+      if(ONB.mode==='form' && !ONB.extracted && !$('[data-f=name]').value){
+        toast('Please enter at least your company name','err');
+        $('[data-f=name]').focus();
+        return;
+      }
+      finish();
+    };
+    $('#onb-skip').onclick=()=>{
+      $$('[data-f]').forEach(el=>{ if(el.value) { const k=el.dataset.f; if(k!=='rev') DB.startup[k]=el.value; } });
+      saveState();
+      location.hash='#/onboarding/financials';
+    };
     const drop=$('#onb-drop'); if(drop){
       ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
       ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
       drop.onclick = drop.ondrop = ()=>{
         drop.innerHTML=`<div class="ico-box green">${I('file-check')}</div><h4>TechNova_Pitch_Deck.pdf</h4><p>4.2 MB · 12 slides</p><div class="progress mt16" style="max-width:240px;margin:16px auto 0"><span id="onb-p" style="width:5%"></span></div>`; refreshIcons();
         const lines=$$('#onb-extract .ln'); $('#onb-extract .xs').textContent='Analyzing TechNova_Pitch_Deck.pdf…';
-        let i=0; const step=()=>{ if(i>0){ lines[i-1].className='ln done'; lines[i-1].querySelector('.st').innerHTML=I('check'); } if(i<lines.length){ lines[i].className='ln run'; lines[i].querySelector('.st').innerHTML=I('loader-2','spin'); $('#onb-p').style.width=Math.round((i+1)/lines.length*100)+'%'; refreshIcons(); i++; setTimeout(step,650); } else { $('#onb-extract .xs').textContent='Done · 12 details extracted'; ONB.extracted=true;
-          const r=$('#onb-review'); r.classList.remove('hidden'); r.innerHTML=`<div class="card" style="padding:26px">${detailsForm(STARTUP_TYPES[ONB.type||'medium'], DB.startup, true)}</div>`; refreshIcons(); r.scrollIntoView({behavior:'smooth'}); toast('Details extracted from your pitch deck'); } };
+        let i=0; const step=()=>{
+          if(i>0){ lines[i-1].className='ln done'; lines[i-1].querySelector('.st').innerHTML=I('check'); }
+          if(i<lines.length){ lines[i].className='ln run'; lines[i].querySelector('.st').innerHTML=I('loader-2','spin'); $('#onb-p').style.width=Math.round((i+1)/lines.length*100)+'%'; refreshIcons(); i++; setTimeout(step,650); }
+          else {
+            $('#onb-extract .xs').textContent='Done · 12 details extracted'; ONB.extracted=true;
+            const r=$('#onb-review'); r.classList.remove('hidden');
+            r.innerHTML=`<div class="card" style="padding:26px">${detailsForm(STARTUP_TYPES[ONB.type||'medium'], DB.startup, true)}</div>
+            <div class="card pad-sm row between mt16" style="background:#eef3ff;border-color:#dbe4ff">
+              <div class="row gap12"><span class="ico-box sm blue">${I('sparkles')}</span><div><b class="small">Pitch deck analyzed · 12 details extracted</b><div class="xs muted">Review the extracted details above, then continue to financial details.</div></div></div>
+              <button class="btn btn-primary" id="onb-deck-next">Continue to Financial Details ${I('arrow-right')}</button>
+            </div>`;
+            refreshIcons();
+            const dn = $('#onb-deck-next'); if(dn) dn.onclick = finish;
+            r.scrollIntoView({behavior:'smooth'});
+            toast('Details extracted from your pitch deck');
+          }
+        };
         step();
       };
     }
+  }
+  if(route==='onboarding/financials'){
+    const saveAndGo = () => {
+      const getVal = (attr) => {
+        const el = document.querySelector(`[data-fin="${attr}"]`);
+        return el ? el.value : null;
+      };
+      if(getVal('revenue')) DB.fin.revenue = parseFloat(getVal('revenue').replace(/[^\d.]/g,'')) || DB.fin.revenue;
+      if(getVal('burn')) DB.fin.burn = parseFloat(getVal('burn').replace(/[^\d.]/g,'')) || DB.fin.burn;
+      if(getVal('runway')) DB.fin.runway = parseInt(getVal('runway')) || DB.fin.runway;
+      if(getVal('target')) DB.fin.target = parseFloat(getVal('target').replace(/[^\d.]/g,'')) || DB.fin.target;
+      if(getVal('arr')) DB.fin.arr = getVal('arr');
+      if(getVal('margin')) DB.fin.margin = getVal('margin');
+      if(getVal('mom')) DB.fin.mom = getVal('mom');
+      if(getVal('yoy')) DB.fin.yoy = getVal('yoy');
+      if(getVal('ebitda')) DB.fin.ebitda = getVal('ebitda');
+      if(getVal('customers')) DB.fin.customers = getVal('customers');
+      if(getVal('arpc')) DB.fin.arpc = getVal('arpc');
+      if(getVal('retention')) DB.fin.retention = getVal('retention');
+      if(getVal('churn')) DB.fin.churn = getVal('churn');
+      if(getVal('closure')) DB.fin.closure = getVal('closure');
+
+      DB.startup.completion = 85;
+      localStorage.setItem('sedana_onboarded','1');
+      sessionStorage.setItem('sedana_tour','1');
+      saveState();
+      toast('Financial details saved · Profile 85% complete');
+      location.hash = '#/dashboard';
+    };
+
+    const sf = $('#onb-f-save'); if(sf) sf.onclick = saveAndGo;
+    const sk = $('#onb-f-skip'); if(sk) sk.onclick = () => {
+      localStorage.setItem('sedana_onboarded','1');
+      sessionStorage.setItem('sedana_tour','1');
+      saveState();
+      location.hash = '#/dashboard';
+    };
+
+    const imp = $('#onb-f-import');
+    if(imp) imp.onclick = () => {
+      toast('Imported 24 financial fields from Financial_Model.xlsx');
+      const rev = $('[data-fin=revenue]'); if(rev) rev.value = '20,00,000';
+      const arr = $('[data-fin=arr]'); if(arr) arr.value = '₹2.4 Cr';
+      const burn = $('[data-fin=burn]'); if(burn) burn.value = '11,50,000';
+      const runway = $('[data-fin=runway]'); if(runway) runway.value = '19';
+      const target = $('[data-fin=target]'); if(target) target.value = '5,00,00,000';
+    };
+
+    const auto = $('#onb-f-autofill');
+    if(auto) auto.onclick = () => {
+      auto.innerHTML = I('loader-2','spin') + ' Analyzing…';
+      refreshIcons();
+      setTimeout(() => {
+        auto.innerHTML = I('check') + ' Auto-filled';
+        refreshIcons();
+        toast('Financial metrics auto-filled with AI');
+      }, 700);
+    };
   }
 };

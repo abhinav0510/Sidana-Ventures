@@ -23,7 +23,8 @@ then visit http://localhost:8765. Internet access is needed once for the Inter f
 1. **Login** – "Continue with Google" (account chooser popup) or email + password. Sign-up and forgot-password screens are included.
 2. **Startup type** – Pre-revenue / Medium size (₹50L – ₹5Cr) / Established (> ₹5Cr).
 3. **Business details** – fill the form manually, or switch to *Upload pitch deck*: the drop zone simulates an upload and an AI extraction sequence, then shows the extracted details for review.
-4. **Dashboard** – the guided tour starts automatically (8 spotlight steps). Replay it from the "Take a tour" button, the floating "Walkthrough" pill, or the user menu.
+4. **Financial details** – enter revenue traction, ARR, monthly burn, runway, target raise, valuation expectations, unit economics and capital allocation breakdown (with AI auto-fill and spreadsheet import options).
+5. **Dashboard** – the guided tour starts automatically (8 spotlight steps). Replay it from the "Take a tour" button, the floating "Walkthrough" pill, or the user menu.
 
 ## Pages (sidebar)
 
